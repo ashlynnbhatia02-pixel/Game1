@@ -23,10 +23,9 @@
             background-image: 
                 radial-gradient(circle at 20% 30%, rgba(255, 245, 225, 0.4) 0%, transparent 30%),
                 radial-gradient(circle at 80% 70%, rgba(255, 235, 200, 0.3) 0%, transparent 35%);
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* === FLOATING BACKGROUND DECORATIONS === */
         .bg-float {
             position: fixed;
             font-size: 2rem;
@@ -41,7 +40,6 @@
             50% { transform: translateY(-30px) rotate(10deg); }
         }
 
-        /* === MAIN GAME CARD === */
         .game-wrapper {
             background: #fdf6ed;
             border-radius: 56px;
@@ -59,7 +57,6 @@
             z-index: 1;
         }
 
-        /* cute paw pattern overlay */
         .game-wrapper::before {
             content: "🐾 🐾 🐾 🐾 🐾 🐾 🐾 🐾";
             position: absolute;
@@ -74,7 +71,6 @@
             white-space: nowrap;
         }
 
-        /* === STATS BAR === */
         .stats-bar {
             display: flex;
             justify-content: space-between;
@@ -91,6 +87,8 @@
                 0 10px 18px rgba(100, 70, 40, 0.12);
             position: relative;
             z-index: 2;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .stat {
@@ -107,7 +105,6 @@
             border: 1px solid #e6d0b8;
             transition: transform 0.15s ease;
             position: relative;
-            overflow: hidden;
         }
 
         .stat.pulse {
@@ -144,10 +141,8 @@
             color: #4a3426;
             font-weight: 700;
             letter-spacing: 0.5px;
-            transition: color 0.3s ease;
         }
 
-        /* === MAIN LAYOUT === */
         .cafe-scene {
             display: flex;
             gap: 20px;
@@ -158,7 +153,6 @@
             z-index: 2;
         }
 
-        /* === ACTION PANEL (LEFT) === */
         .action-panel {
             background: linear-gradient(145deg, #f0e0cd 0%, #e3d0b8 100%);
             border-radius: 40px;
@@ -188,12 +182,6 @@
             border-radius: 30px;
             border: 1px solid #b8956e;
             box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.6), 0 2px 0 #a5825e;
-            animation: titleGlow 3s infinite ease-in-out;
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { box-shadow: inset 0 1px 3px rgba(255,255,255,0.6), 0 2px 0 #a5825e; }
-            50% { box-shadow: inset 0 1px 3px rgba(255,255,255,0.9), 0 2px 0 #a5825e, 0 0 12px rgba(255, 200, 120, 0.5); }
         }
 
         .button-grid {
@@ -225,6 +213,7 @@
             letter-spacing: 0.3px;
             position: relative;
             overflow: hidden;
+            font-family: inherit;
         }
 
         .btn::after {
@@ -236,6 +225,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
             transition: left 0.5s ease;
+            pointer-events: none;
         }
 
         .btn:hover::after {
@@ -282,15 +272,9 @@
             border: 1px solid #d4bc9c;
         }
 
-        .btn-drink {
-            background: linear-gradient(180deg, #fff5e8 0%, #f0e0c8 100%);
-        }
+        .btn-drink { background: linear-gradient(180deg, #fff5e8 0%, #f0e0c8 100%); }
+        .btn-cat { background: linear-gradient(180deg, #fff0e0 0%, #f5dfc5 100%); }
 
-        .btn-cat {
-            background: linear-gradient(180deg, #fff0e0 0%, #f5dfc5 100%);
-        }
-
-        /* === RELAX METER === */
         .relax-meter {
             background: linear-gradient(180deg, #f3e3d0 0%, #e8d3b8 100%);
             border-radius: 100px;
@@ -364,7 +348,6 @@
             100% { left: 100%; }
         }
 
-        /* === CAT & DRINK PANEL (RIGHT) === */
         .cat-drink-panel {
             background: linear-gradient(145deg, #f0e0cd 0%, #e3d0b8 100%);
             border-radius: 40px;
@@ -409,15 +392,8 @@
             margin-bottom: 8px;
             align-content: flex-start;
             transition: background 0.2s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .cat-list:hover, .drink-list:hover {
-            background: rgba(252, 245, 235, 0.85);
-        }
-
-        /* === ANIMATED CAT ITEMS === */
         .cat-item {
             background: linear-gradient(180deg, #fffaf2 0%, #f7ede0 100%);
             border-radius: 30px;
@@ -436,8 +412,6 @@
             animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
-            cursor: pointer;
-            overflow: visible;
         }
 
         .cat-item:hover {
@@ -454,47 +428,14 @@
             transform-origin: bottom center;
         }
 
-        .cat-item:nth-child(2n) span:first-child {
-            animation-delay: 0.3s;
-            animation-duration: 2.4s;
-        }
-        .cat-item:nth-child(3n) span:first-child {
-            animation-delay: 0.6s;
-            animation-duration: 2.8s;
-        }
-        .cat-item:nth-child(4n) span:first-child {
-            animation-delay: 0.9s;
-            animation-duration: 2.2s;
-        }
-        .cat-item:nth-child(5n) span:first-child {
-            animation-delay: 1.2s;
-            animation-duration: 3s;
-        }
+        .cat-item:nth-child(2n) span:first-child { animation-delay: 0.3s; animation-duration: 2.4s; }
+        .cat-item:nth-child(3n) span:first-child { animation-delay: 0.6s; animation-duration: 2.8s; }
+        .cat-item:nth-child(4n) span:first-child { animation-delay: 0.9s; animation-duration: 2.2s; }
+        .cat-item:nth-child(5n) span:first-child { animation-delay: 1.2s; animation-duration: 3s; }
 
         @keyframes catBounce {
             0%, 100% { transform: translateY(0) rotate(-3deg); }
             50% { transform: translateY(-4px) rotate(3deg); }
-        }
-
-        /* Cat tail wag simulation */
-        .cat-item::after {
-            content: "〰️";
-            position: absolute;
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 0.7rem;
-            opacity: 0;
-            animation: tailWag 1.5s infinite ease-in-out;
-        }
-
-        .cat-item:hover::after {
-            opacity: 1;
-        }
-
-        @keyframes tailWag {
-            0%, 100% { transform: translateY(-50%) rotate(-15deg); }
-            50% { transform: translateY(-50%) rotate(15deg); }
         }
 
         @keyframes popIn {
@@ -503,7 +444,6 @@
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
-        /* === ANIMATED DRINK ITEMS === */
         .drink-item {
             background: linear-gradient(180deg, #fffaf2 0%, #f7ede0 100%);
             border-radius: 30px;
@@ -529,19 +469,14 @@
             animation: steamRise 2.5s infinite ease-in-out;
         }
 
-        .drink-item:nth-child(2n) span:first-child {
-            animation-delay: 0.4s;
-        }
-        .drink-item:nth-child(3n) span:first-child {
-            animation-delay: 0.8s;
-        }
+        .drink-item:nth-child(2n) span:first-child { animation-delay: 0.4s; }
+        .drink-item:nth-child(3n) span:first-child { animation-delay: 0.8s; }
 
         @keyframes steamRise {
             0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
             50% { transform: translateY(-4px) scale(1.08); opacity: 0.85; }
         }
 
-        /* steam particles above drinks */
         .drink-item::before {
             content: "";
             position: absolute;
@@ -572,7 +507,6 @@
             text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
         }
 
-        /* === LOG === */
         .log-area {
             background: linear-gradient(180deg, #e8d5bd 0%, #dcc6a8 100%);
             border-radius: 30px;
@@ -598,7 +532,6 @@
             align-items: center;
             justify-content: center;
             line-height: 1.4;
-            transition: background 0.3s ease;
         }
 
         .log-area.flash {
@@ -610,7 +543,6 @@
             100% { background: linear-gradient(180deg, #e8d5bd 0%, #dcc6a8 100%); }
         }
 
-        /* === FLOATING PARTICLES === */
         .particle {
             position: fixed;
             pointer-events: none;
@@ -624,7 +556,6 @@
             100% { transform: translateY(-100px) scale(1.8) rotate(30deg); opacity: 0; }
         }
 
-        /* === COIN SPARKLE === */
         .sparkle {
             position: fixed;
             width: 8px;
@@ -643,24 +574,6 @@
             100% { transform: scale(0); opacity: 0; }
         }
 
-        /* === CAT WALKING IN CAFÉ SCENE === */
-        .walking-cat {
-            position: absolute;
-            font-size: 2rem;
-            z-index: 1;
-            pointer-events: none;
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
-        }
-
-        @keyframes walkAcross {
-            0% { transform: translateX(-60px) scaleX(1); }
-            49% { transform: translateX(calc(100% + 60px)) scaleX(1); }
-            50% { transform: translateX(calc(100% + 60px)) scaleX(-1); }
-            99% { transform: translateX(-60px) scaleX(-1); }
-            100% { transform: translateX(-60px) scaleX(1); }
-        }
-
-        /* responsive */
         @media (max-width: 650px) {
             .game-wrapper { padding: 20px 18px 24px; border-radius: 40px; }
             .stats-bar { flex-wrap: wrap; gap: 8px; justify-content: center; }
@@ -672,7 +585,6 @@
     </style>
 </head>
 <body>
-    <!-- Floating background emojis -->
     <div class="bg-float" style="top: 10%; left: 5%; animation-delay: 0s;">☕</div>
     <div class="bg-float" style="top: 70%; left: 8%; animation-delay: 3s;">🐾</div>
     <div class="bg-float" style="top: 20%; right: 6%; animation-delay: 6s;">🐱</div>
@@ -680,8 +592,7 @@
     <div class="bg-float" style="top: 45%; left: 3%; animation-delay: 12s;">💖</div>
     <div class="bg-float" style="top: 55%; right: 4%; animation-delay: 15s;">✨</div>
 
-    <div class="game-wrapper" id="gameWrapper">
-        <!-- Stats bar -->
+    <div class="game-wrapper">
         <div class="stats-bar">
             <div class="stat" id="coinStat"><span id="coinIcon">🪙</span> <span class="stat-value" id="coinDisplay">100</span></div>
             <div class="stat" id="ingredientStat"><span>🧺</span> <span class="stat-value" id="ingredientDisplay">5</span></div>
@@ -689,9 +600,7 @@
             <div class="stat" id="drinkStat"><span>☕</span> <span class="stat-value" id="drinkCountDisplay">0</span></div>
         </div>
 
-        <!-- Main content -->
-        <div class="cafe-scene" id="cafeScene">
-            <!-- Left: Actions -->
+        <div class="cafe-scene">
             <div class="action-panel">
                 <div class="panel-title">🐾  ACTIONS  🐾</div>
                 <div class="button-grid">
@@ -708,7 +617,6 @@
                 </div>
             </div>
 
-            <!-- Right: Cats & Drinks -->
             <div class="cat-drink-panel">
                 <div class="section-label">🐱  RESIDENT CATS</div>
                 <div class="cat-list" id="catList">
@@ -722,7 +630,6 @@
             </div>
         </div>
 
-        <!-- Log -->
         <div class="log-area" id="logMessage">✨ Welcome to your cozy cat café! ✨</div>
     </div>
 
@@ -755,8 +662,6 @@
             const catStat = document.getElementById('catStat');
             const drinkStat = document.getElementById('drinkStat');
             const ingredientStat = document.getElementById('ingredientStat');
-            const gameWrapper = document.getElementById('gameWrapper');
-            const cafeScene = document.getElementById('cafeScene');
 
             // helpers
             const catEmojis = ['🐱', '🐈', '🐈‍⬛', '😺', '😸', '😻', '🐾', '🐈‍⬛', '🐱'];
@@ -777,28 +682,26 @@
                 return catEmojis[Math.floor(Math.random() * catEmojis.length)];
             }
 
-            // pulse a stat element
             function pulseStat(el) {
                 el.classList.remove('pulse');
                 void el.offsetWidth;
                 el.classList.add('pulse');
             }
 
-            // spin coin icon
             function spinCoin() {
                 coinIcon.classList.remove('spin');
                 void coinIcon.offsetWidth;
                 coinIcon.classList.add('spin');
             }
 
-            // particle burst at coordinates
+            // Particle burst
             function spawnParticles(x, y, emojis) {
                 for (let i = 0; i < 8; i++) {
                     const p = document.createElement('div');
                     p.className = 'particle';
                     p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    p.style.left = (x + (Math.random() - 0.5) * 80) + 'px';
-                    p.style.top = (y + (Math.random() - 0.5) * 40) + 'px';
+                    p.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
+                    p.style.top = (y + (Math.random() - 0.5) * 50) + 'px';
                     p.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
                     p.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
                     document.body.appendChild(p);
@@ -806,13 +709,161 @@
                 }
             }
 
-            // sparkle burst (golden)
             function spawnSparkles(x, y) {
                 for (let i = 0; i < 12; i++) {
                     const s = document.createElement('div');
                     s.className = 'sparkle';
-                    s.style.left = (x + (Math.random() - 0.5) * 120) + 'px';
+                    s.style.left = (x + (Math.random() - 0.5) * 140) + 'px';
                     s.style.top = (y + (Math.random() - 0.5) * 60) + 'px';
                     s.style.animationDelay = (Math.random() * 0.2) + 's';
                     document.body.appendChild(s);
-                    setTimeout(() => s.remove(), 1000
+                    setTimeout(() => s.remove(), 1000);
+                }
+            }
+
+            // Refresh UI
+            function updateUI() {
+                coinDisplay.textContent = coins;
+                ingredientDisplay.textContent = ingredients;
+                catCountDisplay.textContent = cats.length;
+                drinkCountDisplay.textContent = drinks;
+
+                let relaxPercent = Math.min(100, relaxation);
+                relaxFill.style.width = relaxPercent + '%';
+                if (relaxPercent >= 100) {
+                    relaxFill.style.background = 'linear-gradient(90deg, #b5e6b5, #7ed17e, #5cb85c)';
+                } else if (relaxPercent >= 60) {
+                    relaxFill.style.background = 'linear-gradient(90deg, #ffd966, #ffb347, #ff8c42)';
+                } else {
+                    relaxFill.style.background = 'linear-gradient(90deg, #ffb347, #ff8c42, #ff6f61)';
+                }
+
+                // Cats
+                catListDiv.innerHTML = '';
+                if (cats.length === 0) {
+                    catListDiv.innerHTML = '<div class="empty-message">No cats yet... adopt a stray!</div>';
+                } else {
+                    cats.forEach(cat => {
+                        const catDiv = document.createElement('div');
+                        catDiv.className = 'cat-item';
+                        catDiv.innerHTML = `<span>${cat.emoji}</span> ${cat.name}`;
+                        catListDiv.appendChild(catDiv);
+                    });
+                }
+
+                // Drinks
+                drinkListDiv.innerHTML = '';
+                if (drinks === 0) {
+                    drinkListDiv.innerHTML = '<div class="empty-message">No drinks ready. Craft some!</div>';
+                } else {
+                    const maxShow = Math.min(drinks, 6);
+                    for (let i = 0; i < maxShow; i++) {
+                        const drinkDiv = document.createElement('div');
+                        drinkDiv.className = 'drink-item';
+                        drinkDiv.innerHTML = `<span>☕</span> Latte`;
+                        drinkListDiv.appendChild(drinkDiv);
+                    }
+                    if (drinks > 6) {
+                        const extraDiv = document.createElement('div');
+                        extraDiv.className = 'drink-item';
+                        extraDiv.innerHTML = `<span>✨</span> +${drinks - 6} more`;
+                        drinkListDiv.appendChild(extraDiv);
+                    }
+                }
+
+                // Button states
+                buyIngredientsBtn.disabled = (coins < 10);
+                craftDrinkBtn.disabled = (ingredients < 2);
+                adoptCatBtn.disabled = (coins < 30);
+                serveDrinkBtn.disabled = (drinks < 1);
+            }
+
+            // ----- ACTIONS -----
+            function buyIngredients() {
+                if (coins < 10) {
+                    log('❌ Not enough coins to buy ingredients!');
+                    return;
+                }
+                coins -= 10;
+                ingredients += 3;
+                pulseStat(ingredientStat);
+                const rect = buyIngredientsBtn.getBoundingClientRect();
+                spawnParticles(rect.left + rect.width / 2, rect.top, ['🧺', '✨', '🫘', '🥛']);
+                log('🧺 You bought fresh ingredients! (+3)');
+                updateUI();
+            }
+
+            function craftDrink() {
+                if (ingredients < 2) {
+                    log('❌ Not enough ingredients to craft a drink!');
+                    return;
+                }
+                ingredients -= 2;
+                drinks += 1;
+                pulseStat(drinkStat);
+                const rect = craftDrinkBtn.getBoundingClientRect();
+                spawnParticles(rect.left + rect.width / 2, rect.top, ['☕', '✨', '💫', '🫧']);
+                log('☕ You crafted a cozy latte! (+1 drink)');
+                updateUI();
+            }
+
+            function adoptCat() {
+                if (coins < 30) {
+                    log('❌ Not enough coins to adopt a cat.');
+                    return;
+                }
+                if (cats.length >= 12) {
+                    log('🏡 Your café is full of cats! Maybe serve some drinks first?');
+                    return;
+                }
+                coins -= 30;
+                const newCat = {
+                    id: Date.now() + Math.random(),
+                    name: getRandomCatName(),
+                    emoji: getRandomCatEmoji()
+                };
+                cats.push(newCat);
+                relaxation = Math.min(100, relaxation + 5);
+                pulseStat(catStat);
+                pulseStat(coinStat);
+                spinCoin();
+                const rect = adoptCatBtn.getBoundingClientRect();
+                spawnParticles(rect.left + rect.width / 2, rect.top, ['💖', '💕', '❤️', '🧡', '💛', '🐾']);
+                spawnSparkles(rect.left + rect.width / 2, rect.top);
+                log(`🐾 You adopted ${newCat.name} ${newCat.emoji}! (+5 relaxation)`);
+                updateUI();
+            }
+
+            function serveDrink() {
+                if (drinks < 1) {
+                    log('❌ No drinks to serve. Craft one first!');
+                    return;
+                }
+                drinks -= 1;
+                coins += 25;
+                const catBonus = Math.min(10, cats.length * 2);
+                const relaxGain = 8 + catBonus;
+                relaxation = Math.min(100, relaxation + relaxGain);
+                pulseStat(coinStat);
+                pulseStat(drinkStat);
+                spinCoin();
+                const rect = serveDrinkBtn.getBoundingClientRect();
+                spawnSparkles(rect.left + rect.width / 2, rect.top);
+                spawnParticles(rect.left + rect.width / 2, rect.top, ['🪙', '💰', '✨', '😌', '💚']);
+                log(`🍵 You served a latte! +25🪙 and +${relaxGain} relaxation (cats help!)`);
+                updateUI();
+            }
+
+            // Attach listeners
+            buyIngredientsBtn.addEventListener('click', buyIngredients);
+            craftDrinkBtn.addEventListener('click', craftDrink);
+            adoptCatBtn.addEventListener('click', adoptCat);
+            serveDrinkBtn.addEventListener('click', serveDrink);
+
+            // Initial render
+            updateUI();
+            log('✨ Welcome to your cozy cat café! ✨');
+        })();
+    </script>
+</body>
+</html>
