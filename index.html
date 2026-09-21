@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>☕🐾 Cozy Cat Café</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  body {
+    font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+    background: #2a1f1a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  .game {
+    background: #fdf6ed;
+    border-radius: 32px;
+    padding: 16px;
+    max-width: 860px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), inset 0 2px 8px #fff;
+    border: 4px solid #e9d5bc;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== ANIMATED CAFÉ SCENE ===== */
+  .scene {
+    position: relative;
+    height: 180px;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: linear-gradient(180deg, #4a2f22 0%, #6b4530 40%, #8b5a3c 100%);
+    border: 3px solid #c9a87c;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  /* Warm wall glow */
+  .scene::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(255,200,120,0.35), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Floor */
+  .floor {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 55px;
+    background: linear-gradient(180deg, #7a4f34, #4a2f22);
+    border-top: 2px solid #3a2218;
+  }
+  .floor::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 40px, rgba(0,0,0,0.15) 40px 42px);
+  }
+
+  /* Hanging lights */
+  .lights {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 30px;
+    display: flex;
+    justify-content: space-around;
+    pointer-events: none;
+  }
+  .light {
+    width: 3px;
+    height: 18px;
+    background: #2a1a10;
+    position: relative;
+  }
+  .light::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe9a8, #ffb347);
+    box-shadow: 0 0 20px 6px rgba(255,180,80,0.7);
+    animation: flicker 2s infinite ease-in-out;
+  }
+  .light:nth-child(2)::after { animation-delay: 0.4s; }
+  .light:nth-child(3)::after { animation-delay: 0.8s; }
+  .light:nth-child(4)::after { animation-delay: 1.2s; }
+  .light:nth-child(5)::after { animation-delay: 1.6s; }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; box-shadow: 0 0 20px 6px rgba(255,180,80,0.7); }
+    50% { opacity: 0.75; box-shadow: 0 0 12px 4px rgba(255,180,80,0.45); }
+  }
+
+  /* Shelves with cups */
+  .shelf {
+    position: absolute;
+    height: 4px;
+    background: #5a3a24;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+  }
+  .shelf-1 { top: 55px; left: 15px; width: 100px; }
+  .shelf-2 { top: 55px; right: 15px; width: 90px; }
+  .shelf-cup {
+    position: absolute;
+    bottom: 4px;
+    font-size: 1rem;
+    animation: cupBob 3s infinite ease-in-out;
+  }
+  .shelf-cup:nth-child(2) { animation-delay: 0.5s; }
+  .shelf-cup:nth-child(3) { animation-delay: 1s; }
+
+  @keyframes cupBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-1px); }
+  }
+
+  /* Counter */
+  .counter {
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 50px;
+    background: linear-gradient(180deg, #a07048, #6b4530);
+    border-radius: 8px 8px 0 0;
+    border: 2px solid #3a2218;
+    box-shadow: 0 -6px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,200,120,0.2);
+  }
+  .counter::before {
+    content: "";
+    position: absolute;
+    top: 4px; left: 6px; right: 6px;
+    height: 4px;
+    background: #c9a87c;
+    border-radius: 2px;
+  }
+
+  /* Espresso machine on counter */
+  .machine {
+    position: absolute;
+    bottom: 8px;
+    left: 20px;
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(180deg, #d4b896, #8b6f53);
+    border-radius: 6px;
+    border: 2px solid #5a3a24;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.4);
+  }
+  .machine::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: #3a2218;
+    border-radius: 50%;
+  }
+
+  /* Steam puffs rising from machine */
+  .steam {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, rgba(255,255,255,0.7), transparent 70%);
+    border-radius: 50%;
+    animation: steamRise 3s infinite ease-out;
+    pointer-events: none;
+  }
+  .steam:nth-child(2) { animation-delay: 1s; }
+  .steam:nth-child(3) { animation-delay: 2s; }
+
+  @keyframes steamRise {
+    0% { transform: translateY(0) scale(0.6); opacity: 0.8; }
+    100% { transform: translateY(-70px) scale(2.5); opacity: 0; }
+  }
+
+  /* Walking cats */
+  .walk-cat {
+    position: absolute;
+    bottom: 18px;
+    font-size: 1.8rem;
+    animation: walkAcross 14s linear infinite;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));
+    z-index: 5;
+  }
+  .walk-cat.flip { animation: walkAcrossFlip 16s linear infinite; }
+  .walk-cat.delay1 { animation-delay: -3s; }
+  .walk-cat.delay2 { animation-delay: -7s; }
+  .walk-cat.delay3 { animation-delay: -11s; }
+
+  @keyframes walkAcross {
+    0%   { left: -40px; transform: scaleX(1); }
+    49%  { left: 100%; transform: scaleX(1); }
+    50%  { left: 100%; transform: scaleX(-1); }
+    99%  { left: -40px; transform: scaleX(-1); }
+    100% { left: -40px; transform: scaleX(1); }
+  }
+  @keyframes walkAcrossFlip {
+    0%   { right: -40px; transform: scaleX(-1); }
+    49%  { right: 100%; transform: scaleX(-1); }
+    50%  { right: 100%; transform: scaleX(1); }
+    99%  { right: -40px; transform: scaleX(1); }
+    100% { right: -40px; transform: scaleX(-1); }
+  }
+
+  /* Bobbing on walk */
+  .walk-cat span {
+    display: inline-block;
+    animation: walkBob 0.5s infinite ease-in-out;
+  }
+  @keyframes walkBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  /* Barista behind counter */
+  .barista {
+    position: absolute;
+    bottom: 95px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    animation: baristaBob 2s infinite ease-in-out;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));
+    z-index: 4;
+  }
+  @keyframes baristaBob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-3px); }
+  }
+
+  /* Dust motes */
+  .mote {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: rgba(255,220,150,0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255,220,150,0.9);
+    animation: moteFloat 8s infinite ease-in-out;
+    pointer-events: none;
+  }
+  .mote:nth-child(2) { animation-delay: 1.5s; animation-duration: 10s; }
+  .mote:nth-child(3) { animation-delay: 3s; animation-duration: 7s; }
+  .mote:nth-child(4) { animation-delay: 4.5s; animation-duration: 9s; }
+  .mote:nth-child(5) { animation-delay: 6s; animation-duration: 11s; }
+
+  @keyframes moteFloat {
+    0%   { transform: translate(0,0); opacity: 0; }
+    20%  { opacity: 0.9; }
+    50%  { transform: translate(30px,-30px); opacity: 0.6; }
+    80%  { opacity: 0.9; }
+    100% { transform: translate(60px,-60px); opacity: 0; }
+  }
+
+  /* Window with rain outside */
+  .window {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 55px;
+    background: linear-gradient(180deg, #1a2a3a, #2a3a4a);
+    border: 3px solid #5a3a24;
+    border-radius: 6px;
+    overflow: hidden;
+    z-index: 2;
+  }
+  .window::before {
+    content: "";
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 2px;
+    background: #5a3a24;
+  }
+  .window::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 2px;
+    background: #5a3a24;
+  }
+  .rain {
+    position: absolute;
+    width: 1px;
+    height: 8px;
+    background: linear-gradient(180deg, transparent, rgba(180,220,255,0.7));
+    animation: rainFall 1s linear infinite;
+  }
+  @keyframes rainFall {
+    0% { transform: translateY(-10px); }
+    100% { transform: translateY(60px); }
+  }
+
+  /* Moon in window */
+  .moon {
+    position: absolute;
+    top: 6px; right: 8px;
+    width: 12px; height: 12px;
+    background: radial-gradient(circle at 30% 30%, #fff8e0, #ffe9a8);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,240,200,0.9);
+  }
+
+  /* ===== STATS ===== */
+  .stats {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    background: linear-gradient(180deg,#f3e3d0,#e8d3b8);
+    border-radius: 50px; padding: 8px 12px; margin-bottom: 12px;
+    border: 2px solid #c9a87c; box-shadow: 0 3px 0 #b28f6b;
+  }
+  .stat {
+    display: flex; align-items: center; gap: 6px;
+    background: #fefaf3; padding: 5px 12px; border-radius: 40px;
+    border: 1px solid #e6d0b8; box-shadow: 0 2px 0 #c9a87c;
+    font-weight: bold; color: #4a3426; font-size: 0.9rem;
+    transition: transform 0.2s;
+  }
+  .stat span:first-child { font-size: 1.2rem; }
+  .stat.pop { animation: pop 0.4s ease; }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); background: #fff3c4; }
+    100% { transform: scale(1); }
+  }
+
+  /* ===== MAIN PANELS ===== */
+  .main { display: flex; gap: 12px; flex-wrap: wrap; }
+  .panel {
+    background: linear-gradient(145deg,#f0e0cd,#e3d0b8);
+    border-radius: 24px; padding: 14px;
+    border: 2px solid #d4b896; box-shadow: 0 5px 0 #b5936e;
+  }
+  .left { flex: 1 1 200px; }
+  .right { flex: 2 1 360px; }
+
+  h3 {
+    text-align: center; color: #4a3426; font-size: 0.85rem;
+    background: #dbc3a8; padding: 5px; border-radius: 20px;
+    border: 1px solid #b28f6b; margin-bottom: 10px; letter-spacing: 1px;
+  }
+
+  .btn {
+    width: 100%; padding: 11px; border: none; border-radius: 30px;
+    background: linear-gradient(180deg,#fffaf2,#f0e0c8);
+    color: #3f2c1b; font-weight: bold; font-size: 0.85rem;
+    cursor: pointer; box-shadow: 0 4px 0 #b5936e;
+    transition: transform 0.08s, box-shadow 0.08s;
+    font-family: inherit; margin-bottom: 8px;
+  }
+  .btn:hover:not(:disabled) { background: linear-gradient(180deg,#fffdf8,#f7e9d7); }
+  .btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 #b5936e; }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: translateY(2px); box-shadow: 0 2px 0 #b5936e; }
+
+  .relax-bar {
+    background: #ccb69b; height: 18px; border-radius: 20px; overflow: hidden;
+    box-shadow: inset 0 3px 6px #8b6f53; margin-top: 6px;
+  }
+  .relax-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg,#ffb347,#ff6f61);
+    transition: width 0.5s ease, background 0.5s;
+    border-radius: 20px; position: relative; overflow: hidden;
+  }
+  .relax-fill::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .list-box {
+    background: rgba(250,240,228,0.7); border-radius: 18px; padding: 10px;
+    min-height: 60px; border: 1px solid #c9af91;
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+    align-content: flex-start;
+  }
+  .chip {
+    background: linear-gradient(180deg,#fffaf2,#f7ede0);
+    padding: 5px 12px; border-radius: 20px; border: 1px solid #e3cdb5;
+    box-shadow: 0 2px 0 #c9a87c; font-weight: bold; font-size: 0.8rem;
+    color: #4d3724; display: flex; align-items: center; gap: 5px;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .chip span:first-child {
+    font-size: 1.1rem; display: inline-block;
+    animation: bounce 2s infinite ease-in-out;
+  }
+  .chip:nth-child(2n) span:first-child { animation-delay: 0.3s; }
+  .chip:nth-child(3n) span:first-child { animation-delay: 0.6s; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-4px) rotate(5deg); }
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .empty { color: #b59a80; font-style: italic; font-size: 0.8rem; padding: 6px; }
+
+  .log {
+    background: #e8d5bd; border-radius: 18px; padding: 10px; margin-top: 12px;
+    text-align: center; font-size: 0.85rem; font-weight: bold;
+    color: #3e2e1f; border: 2px solid #b28f6b;
+    box-shadow: inset 0 2px 6px #b19070; min-height: 40px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Floating particles */
+  .float-emoji {
+    position: fixed; pointer-events: none; font-size: 1.5rem; z-index: 9999;
+    animation: floatUp 1.2s ease-out forwards;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 1; }
+    100% { transform: translateY(-120px) scale(1.6); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="game">
+
+  <!-- ===== ANIMATED CAFÉ SCENE ===== -->
+  <div class="scene">
+    <!-- Hanging lights -->
+    <div class="lights">
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+      <div class="light"></div>
+    </div>
+
+    <!-- Window with rain -->
+    <div class="window">
+      <div class="moon"></div>
+      <div class="rain" style="left:10%; animation-delay:0s;"></div>
+      <div class="rain" style="left:25%; animation-delay:0.3s;"></div>
+      <div class="rain" style="left:40%; animation-delay:0.6s;"></div>
+      <div class="rain" style="left:55%; animation-delay:0.2s;"></div>
+      <div class="rain" style="left:70%; animation-delay:0.5s;"></div>
+      <div class="rain" style="left:85%; animation-delay:0.8s;"></div>
+    </div>
+
+    <!-- Shelves -->
+    <div class="shelf shelf-1">
+      <span class="shelf-cup" style="left:10px;">☕</span>
+      <span class="shelf-cup" style="left:35px;">🍵</span>
+      <span class="shelf-cup" style="left:60px;">☕</span>
+    </div>
+    <div class="shelf shelf-2">
+      <span class="shelf-cup" style="right:10px;">🫖</span>
+      <span class="shelf-cup" style="right:40px;">☕</span>
+    </div>
+
+    <!-- Floor -->
+    <div class="floor"></div>
+
+    <!-- Barista behind counter -->
+    <div class="barista">👩‍🍳</div>
+
+    <!-- Counter with machine -->
+    <div class="counter">
+      <div class="machine"></div>
+      <div class="steam"></div>
+      <div class="steam"></div>
+      <div class="steam"></div>
+    </div>
+
+    <!-- Walking cats -->
+    <div class="walk-cat"><span>🐈</span></div>
+    <div class="walk-cat flip delay1"><span>🐱</span></div>
+    <div class="walk-cat delay2"><span>🐈‍⬛</span></div>
+    <div class="walk-cat flip delay3"><span>😺</span></div>
+
+    <!-- Floating dust motes -->
+    <div class="mote" style="top:40%; left:20%;"></div>
+    <div class="mote" style="top:60%; left:70%;"></div>
+    <div class="mote" style="top:30%; left:45%;"></div>
+    <div class="mote" style="top:70%; left:35%;"></div>
+    <div class="mote" style="top:50%; left:85%;"></div>
+  </div>
+
+  <!-- ===== STATS ===== -->
+  <div class="stats">
+    <div class="stat" id="s-coins"><span>🪙</span><span id="v-coins">100</span></div>
+    <div class="stat" id="s-ing"><span>🧺</span><span id="v-ing">5</span></div>
+    <div class="stat" id="s-cats"><span>🐱</span><span id="v-cats">0</span></div>
+    <div class="stat" id="s-drinks"><span>☕</span><span id="v-drinks">0</span></div>
+  </div>
+
+  <!-- ===== MAIN PANELS ===== -->
+  <div class="main">
+    <div class="panel left">
+      <h3>🐾 ACTIONS</h3>
+      <button class="btn" id="btn-buy">🧺 Buy Ingredients (10🪙)</button>
+      <button class="btn" id="btn-craft">☕ Craft Latte (2🧺)</button>
+      <button class="btn" id="btn-adopt">🐈 Adopt Stray Cat (30🪙)</button>
+      <button class="btn" id="btn-serve">🍵 Serve Drink (+25🪙)</button>
+
+      <div style="margin-top:6px; font-weight:bold; color:#4a3426; font-size:0.8rem; text-align:center;">😌 Relaxation</div>
+      <div class="relax-bar"><div class="relax-fill" id="relax-fill"></div></div>
+    </div>
+
+    <div class="panel right">
+      <h3>🐱 RESIDENT CATS</h3>
+      <div class="list-box" id="cat-list">
+        <div class="empty">No cats yet... adopt a stray!</div>
+      </div>
+
+      <h3>☕ CRAFTED DRINKS</h3>
+      <div class="list-box" id="drink-list">
+        <div class="empty">No drinks ready. Craft some!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="log" id="log">✨ Welcome to your cozy cat café! ✨</div>
+</div>
+
+<script>
+var coins = 100, ingredients = 5, cats = [], drinks = 0, relaxation = 0;
+
+var vCoins = document.getElementById('v-coins');
+var vIng = document.getElementById('v-ing');
+var vCats = document.getElementById('v-cats');
+var vDrinks = document.getElementById('v-drinks');
+var relaxFill = document.getElementById('relax-fill');
+var catList = document.getElementById('cat-list');
+var drinkList = document.getElementById('drink-list');
+var logEl = document.getElementById('log');
+var sCoins = document.getElementById('s-coins');
+var sIng = document.getElementById('s-ing');
+var sCats = document.getElementById('s-cats');
+var sDrinks = document.getElementById('s-drinks');
+var btnBuy = document.getElementById('btn-buy');
+var btnCraft = document.getElementById('btn-craft');
+var btnAdopt = document.getElementById('btn-adopt');
+var btnServe = document.getElementById('btn-serve');
+
+var catNames = ['Mocha','Latte','Espresso','Muffin','Biscuit','Cocoa','Mochi','Bean','Cinnamon','Toffee'];
+var catFaces = ['🐱','🐈','😺','😸','😻','🐈‍⬛'];
+
+function setLog(msg) { logEl.textContent = msg; }
+function popStat(el) {
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+}
+function spawnBurst(x, y, emojis) {
+  for (var i = 0; i < 8; i++) {
+    var el = document.createElement('div');
+    el.className = 'float-emoji';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = (x + (Math.random() - 0.5) * 100) + 'px';
+    el.style.top  = (y + (Math.random() - 0.5) * 40) + 'px';
+    el.style.animationDuration = (0.9 + Math.random() * 0.5) + 's';
+    document.body.appendChild(el);
+    setTimeout(function(node){ return function(){ node.remove(); }; }(el), 1500);
+  }
+}
+function centerOf(el) {
+  var r = el.getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top };
+}
+
+function render() {
+  vCoins.textContent = coins;
+  vIng.textContent = ingredients;
+  vCats.textContent = cats.length;
+  vDrinks.textContent = drinks;
+
+  var pct = Math.min(100, relaxation);
+  relaxFill.style.width = pct + '%';
+  if (pct >= 100) relaxFill.style.background = 'linear-gradient(90deg,#7ed17e,#5cb85c)';
+  else if (pct >= 60) relaxFill.style.background = 'linear-gradient(90deg,#ffd966,#ffb347)';
+  else relaxFill.style.background = 'linear-gradient(90deg,#ffb347,#ff6f61)';
+
+  catList.innerHTML = '';
+  if (cats.length === 0) {
+    catList.innerHTML = '<div class="empty">No cats yet... adopt a stray!</div>';
+  } else {
+    for (var i = 0; i < cats.length; i++) {
+      var d = document.createElement('div');
+      d.className = 'chip';
+      d.innerHTML = '<span>' + cats[i].emoji + '</span>' + cats[i].name;
+      catList.appendChild(d);
+    }
+  }
+
+  drinkList.innerHTML = '';
+  if (drinks === 0) {
+    drinkList.innerHTML = '<div class="empty">No drinks ready. Craft some!</div>';
+  } else {
+    var show = Math.min(drinks, 6);
+    for (var j = 0; j < show; j++) {
+      var d2 = document.createElement('div');
+      d2.className = 'chip';
+      d2.innerHTML = '<span>☕</span>Latte';
+      drinkList.appendChild(d2);
+    }
+    if (drinks > 6) {
+      var d3 = document.createElement('div');
+      d3.className = 'chip';
+      d3.innerHTML = '<span>✨</span>+' + (drinks - 6) + ' more';
+      drinkList.appendChild(d3);
+    }
+  }
+
+  btnBuy.disabled = coins < 10;
+  btnCraft.disabled = ingredients < 2;
+  btnAdopt.disabled = coins < 30;
+  btnServe.disabled = drinks < 1;
+}
+
+btnBuy.onclick = function() {
+  if (coins < 10) { setLog('❌ Not enough coins!'); return; }
+  coins -= 10; ingredients += 3;
+  popStat(sIng);
+  var c = centerOf(btnBuy); spawnBurst(c.x, c.y, ['🧺','✨','🫘','🥛']);
+  setLog('🧺 Bought ingredients! (+3)');
+  render();
+};
+
+btnCraft.onclick = function() {
+  if (ingredients < 2) { setLog('❌ Need 2 ingredients!'); return; }
+  ingredients -= 2; drinks += 1;
+  popStat(sDrinks);
+  var c = centerOf(btnCraft); spawnBurst(c.x, c.y, ['☕','✨','💫']);
+  setLog('☕ Crafted a cozy latte! (+1)');
+  render();
+};
+
+btnAdopt.onclick = function() {
+  if (coins < 30) { setLog('❌ Need 30 coins!'); return; }
+  if (cats.length >= 12) { setLog('🏡 Café is full of cats!'); return; }
+  coins -= 30;
+  var name = catNames[Math.floor(Math.random() * catNames.length)];
+  var face = catFaces[Math.floor(Math.random() * catFaces.length)];
+  cats.push({ name: name, emoji: face });
+  relaxation = Math.min(100, relaxation + 5);
+  popStat(sCats); popStat(sCoins);
+  var c = centerOf(btnAdopt); spawnBurst(c.x, c.y, ['💖','💕','❤️','🐾','✨']);
+  setLog('🐾 Adopted ' + name + ' ' + face + '! (+5 relax)');
+  render();
+};
+
+btnServe.onclick = function() {
+  if (drinks < 1) { setLog('❌ No drinks to serve!'); return; }
+  drinks -= 1; coins += 25;
+  var catBonus = Math.min(10, cats.length * 2);
+  var gain = 8 + catBonus;
+  relaxation = Math.min(100, relaxation + gain);
+  popStat(sCoins); popStat(sDrinks);
+  var c = centerOf(btnServe); spawnBurst(c.x, c.y, ['🪙','💰','✨','😌','💚']);
+  setLog('🍵 Served a latte! +25🪙, +' + gain + ' relax');
+  render();
+};
+
+render();
+setLog('✨ Welcome to your cozy cat café! ✨');
+</script>
+</body>
+</html>
