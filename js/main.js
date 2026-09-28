@@ -3,4 +3,6 @@
    Entry point. Boots the game.
    ============================================================ */
 
-import { startGame } from "./
+import { startGame } from "./controller.js";
+
+startGame();
