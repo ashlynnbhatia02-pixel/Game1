@@ -4,7 +4,6 @@
    ============================================================ */
 
 import { state } from "./state.js";
-import { getTotalLevels } from "../data/cases.js";
 
 const els = {
   caseTitle:   document.getElementById("caseTitle"),
@@ -39,7 +38,7 @@ function renderScene() {
   els.scene.innerHTML = state.currentCase.scene;
 }
 
-function renderClues() {
+export function renderClues() {
   els.clues.innerHTML = "";
   state.currentCase.clues.forEach((text, i) => {
     const li = document.createElement("li");
@@ -50,7 +49,7 @@ function renderClues() {
   });
 }
 
-function renderSuspects() {
+export function renderSuspects() {
   els.suspects.innerHTML = "";
   state.currentCase.suspects.forEach((s, i) => {
     const card = document.createElement("div");
@@ -66,15 +65,14 @@ function renderSuspects() {
   });
 }
 
-function renderAccuseButton() {
+export function renderAccuseButton() {
   els.accuseBtn.disabled =
     state.gameOver || state.selectedSuspectIndex === null;
 }
 
-function renderFooter() {
-  const total = getTotalLevels();
+export function renderFooter() {
   els.levelLabel.textContent =
-    `Level ${state.currentCase.level} of ${total}`;
+    `Level ${state.currentCase.level} of ${state.totalLevels}`;
   els.nextCaseBtn.hidden = !state.gameOver;
 }
 
