@@ -1,385 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cold Case: The Library Murder</title>
-<style>
-  :root {
-    --bg: #1a1a1a;
-    --panel: #242424;
-    --paper: #e8e2d0;
-    --ink: #1a1a1a;
-    --accent: #c9a961;
-    --danger: #b33a3a;
-    --success: #4a8f5c;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(circle at 50% 0%, #2a2a2a, #0d0d0d 70%);
-    color: var(--paper);
-    font-family: 'Courier New', Courier, monospace;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-
-  .case-file {
-    width: 100%;
-    max-width: 720px;
-    background: var(--panel);
-    border: 1px solid #3a3a3a;
-    border-radius: 6px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-    padding: 32px;
-  }
-
-  .header {
-    border-bottom: 1px solid #3a3a3a;
-    padding-bottom: 16px;
-    margin-bottom: 24px;
-  }
-
-  .stamp {
-    display: inline-block;
-    border: 2px solid var(--danger);
-    color: var(--danger);
-    padding: 4px 12px;
-    font-size: 12px;
-    letter-spacing: 2px;
-    transform: rotate(-3deg);
-    margin-bottom: 12px;
-    opacity: 0.85;
-  }
-
-  h1 {
-    margin: 0 0 8px 0;
-    font-size: 22px;
-    letter-spacing: 1px;
-  }
-
-  .case-id {
-    color: var(--accent);
-    font-size: 13px;
-    letter-spacing: 2px;
-  }
-
-  .scene {
-    background: var(--paper);
-    color: var(--ink);
-    padding: 18px 20px;
-    border-radius: 3px;
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 24px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
-  }
-
-  .scene strong { color: var(--danger); }
-
-  h2 {
-    font-size: 13px;
-    letter-spacing: 3px;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin: 24px 0 12px 0;
-  }
-
-  .clues {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 24px 0;
-  }
-
-  .clues li {
-    padding: 10px 14px;
-    background: #2e2e2e;
-    border-left: 3px solid var(--accent);
-    margin-bottom: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .clues li:hover { background: #383838; }
-
-  .clues li.read {
-    border-left-color: #555;
-    color: #888;
-    font-style: italic;
-  }
-
-  .suspects {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .suspect {
-    background: #2e2e2e;
-    border: 1px solid #3a3a3a;
-    border-radius: 4px;
-    padding: 14px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .suspect:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-
-  .suspect.selected {
-    border-color: var(--accent);
-    background: #3a3226;
-    box-shadow: 0 0 0 2px var(--accent);
-  }
-
-  .suspect .avatar {
-    font-size: 32px;
-    margin-bottom: 8px;
-  }
-
-  .suspect .name {
-    font-size: 13px;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-
-  .suspect .role {
-    font-size: 11px;
-    color: #888;
-  }
-
-  button {
-    background: var(--accent);
-    color: var(--ink);
-    border: none;
-    padding: 12px 24px;
-    font-family: inherit;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 3px;
-    transition: all 0.15s;
-    width: 100%;
-  }
-
-  button:hover:not(:disabled) { background: #ddb974; }
-
-  button:disabled {
-    background: #3a3a3a;
-    color: #666;
-    cursor: not-allowed;
-  }
-
-  .result {
-    margin-top: 20px;
-    padding: 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    line-height: 1.6;
-    display: none;
-  }
-
-  .result.show { display: block; }
-
-  .result.win {
-    background: rgba(74, 143, 92, 0.15);
-    border: 1px solid var(--success);
-    color: #b8e0c4;
-  }
-
-  .result.lose {
-    background: rgba(179, 58, 58, 0.15);
-    border: 1px solid var(--danger);
-    color: #f0b8b8;
-  }
-
-  .restart {
-    margin-top: 12px;
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-  }
-
-  .restart:hover { background: rgba(201, 169, 97, 0.1); }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cold Case</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<div class="case-file">
-  <div class="header">
-    <div class="stamp">OPEN CASE</div>
-    <h1>The Library Murder</h1>
-    <div class="case-id">CASE FILE #0471 · 9:42 PM</div>
-  </div>
+  <main class="case-file" id="app">
 
-  <div class="scene" id="scene">
-    <!-- Filled by JS -->
-  </div>
+    <header class="header">
+      <div class="stamp">OPEN CASE</div>
+      <h1 id="caseTitle">Loading…</h1>
+      <div class="case-id" id="caseId"></div>
+    </header>
 
-  <h2>Evidence</h2>
-  <ul class="clues" id="clues"></ul>
+    <section class="scene" id="scene"></section>
 
-  <h2>Suspects</h2>
-  <div class="suspects" id="suspects"></div>
+    <h2>Evidence</h2>
+    <ul class="clues" id="clues"></ul>
 
-  <button id="accuseBtn" disabled>Accuse Suspect</button>
+    <h2>Suspects</h2>
+    <div class="suspects" id="suspects"></div>
 
-  <div class="result" id="result"></div>
-</div>
+    <button id="accuseBtn" disabled>Accuse Suspect</button>
 
-<script>
-/* ============================================================
-   COLD CASE — Week 1
-   Everything lives in one file. That's the point.
-   The data shape below is what we'll split into files in Week 2.
-   ============================================================ */
+    <div class="result" id="result"></div>
 
-// ----- THE CASE -----
-const CASE = {
-  id: "0471",
-  title: "The Library Murder",
-  scene: `At <strong>9:42 PM</strong> last night, the body of <strong>Mr. Edgar Vance</strong> was discovered in the <strong>west wing of the city library</strong>. He had been struck over the head with a brass candlestick. The library was locked from the inside. Only three people had keys.`,
-  clues: [
-    { id: "c1", text: "A muddy footprint was found near the body — size 10, men's dress shoe." },
-    { id: "c2", text: "The library's back door was unlocked. It rained heavily that evening." },
-    { id: "c3", text: "A torn piece of red fabric was caught on the candlestick." },
-    { id: "c4", text: "The night janitor says he saw a figure in a red coat leaving around 9:30 PM." },
-    { id: "c5", text: "Miss Holloway was seen at the theater until 9:15 PM — she wore a green dress." },
-    { id: "c6", text: "Mr. Ashford's shoe size is 10. He claims he was home all evening." }
-  ],
-  suspects: [
-    { id: "s1", name: "Miss Holloway", role: "Librarian", avatar: "👩‍🦰", guilty: false },
-    { id: "s2", name: "Mr. Ashford",   role: "Businessman", avatar: "🧔", guilty: true },
-    { id: "s3", name: "Dr. Crane",     role: "Family Physician", avatar: "👨‍⚕️", guilty: false }
-  ]
-};
+    <footer class="footer">
+      <span id="levelLabel">Level 1 of 100</span>
+      <button id="nextCaseBtn" class="link-btn" hidden>Next Case →</button>
+    </footer>
 
-// ----- GAME STATE -----
-// Notice: we keep state separate from data.
-// In Week 5, this whole object is what we'll save to localStorage.
-let state = {
-  selectedSuspectId: null,
-  cluesRead: new Set(),
-  gameOver: false
-};
+  </main>
 
-// ----- DOM REFS -----
-const sceneEl    = document.getElementById("scene");
-const cluesEl    = document.getElementById("clues");
-const suspectsEl = document.getElementById("suspects");
-const accuseBtn  = document.getElementById("accuseBtn");
-const resultEl   = document.getElementById("result");
-
-// ----- RENDER -----
-function renderScene() {
-  sceneEl.innerHTML = CASE.scene;
-}
-
-function renderClues() {
-  cluesEl.innerHTML = "";
-  CASE.clues.forEach(clue => {
-    const li = document.createElement("li");
-    li.textContent = clue.text;
-    if (state.cluesRead.has(clue.id)) li.classList.add("read");
-    li.addEventListener("click", () => readClue(clue.id));
-    cluesEl.appendChild(li);
-  });
-}
-
-function renderSuspects() {
-  suspectsEl.innerHTML = "";
-  CASE.suspects.forEach(s => {
-    const card = document.createElement("div");
-    card.className = "suspect";
-    if (state.selectedSuspectId === s.id) card.classList.add("selected");
-    card.innerHTML = `
-      <div class="avatar">${s.avatar}</div>
-      <div class="name">${s.name}</div>
-      <div class="role">${s.role}</div>
-    `;
-    card.addEventListener("click", () => selectSuspect(s.id));
-    suspectsEl.appendChild(card);
-  });
-}
-
-// ----- ACTIONS -----
-function readClue(id) {
-  if (state.gameOver) return;
-  state.cluesRead.add(id);
-  renderClues();
-}
-
-function selectSuspect(id) {
-  if (state.gameOver) return;
-  state.selectedSuspectId = id;
-  accuseBtn.disabled = false;
-  renderSuspects();
-}
-
-function accuse() {
-  if (state.gameOver || !state.selectedSuspectId) return;
-  state.gameOver = true;
-
-  const accused = CASE.suspects.find(s => s.id === state.selectedSuspectId);
-  const murderer = CASE.suspects.find(s => s.guilty);
-
-  resultEl.classList.add("show");
-  if (accused.guilty) {
-    resultEl.classList.add("win");
-    resultEl.innerHTML = `
-      <strong>CASE CLOSED.</strong><br>
-      ${accused.name} was the killer. The red fabric, the size-10 shoe, and the unlocked back door all pointed to him. Justice is served.
-    `;
-  } else {
-    resultEl.classList.add("lose");
-    resultEl.innerHTML = `
-      <strong>CASE COLD.</strong><br>
-      ${accused.name} was innocent. The real killer was <strong>${murderer.name}</strong>. He slipped away while you chased the wrong lead.
-    `;
-  }
-
-  const restart = document.createElement("button");
-  restart.className = "restart";
-  restart.textContent = "Reopen Case";
-  restart.addEventListener("click", resetGame);
-  resultEl.appendChild(restart);
-
-  accuseBtn.disabled = true;
-}
-
-function resetGame() {
-  state = {
-    selectedSuspectId: null,
-    cluesRead: new Set(),
-    gameOver: false
-  };
-  resultEl.classList.remove("show", "win", "lose");
-  resultEl.innerHTML = "";
-  accuseBtn.disabled = true;
-  renderClues();
-  renderSuspects();
-}
-
-// ----- WIRE UP -----
-accuseBtn.addEventListener("click", accuse);
-
-// ----- BOOT -----
-renderScene();
-renderClues();
-renderSuspects();
-</script>
-
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
