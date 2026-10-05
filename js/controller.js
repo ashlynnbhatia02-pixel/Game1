@@ -1,7 +1,6 @@
 /* ============================================================
    js/controller.js
-   Handles user input. Every input method (mouse, touch,
-   keyboard) will eventually route through these functions.
+   Game actions + timer + tab switching.
    ============================================================ */
 
 import { state } from "./state.js";
@@ -11,6 +10,8 @@ import {
   renderSuspects,
   renderAccuseButton,
   renderFooter,
+  renderTabs,
+  renderTimer,
   showResult,
   clearResult,
   getElements
@@ -39,26 +40,45 @@ export function attachHandlers() {
     if (!next) return;
     clearResult();
     renderAll();
+    startTimer();
+  });
+
+  // Tab clicks
+  els.tabs.forEach(tab => {
+    tab.addEventListener("click", () => setActiveTab(tab.dataset.tab));
   });
 }
 
-function readClue(index) {
+export function readClue(index) {
   if (state.gameOver) return;
   state.cluesRead.add(index);
   renderClues();
 }
 
-function selectSuspect(index) {
+export function selectSuspect(index) {
   if (state.gameOver) return;
   state.selectedSuspectIndex = index;
   renderSuspects();
   renderAccuseButton();
 }
 
-function accuse() {
+export function setActiveTab(tabName) {
+  state.activeTab = tabName;
+  renderTabs();
+}
+
+export function cycleTab(direction) {
+  const tabs = ["evidence", "suspects"];
+  const current = tabs.indexOf(state.activeTab);
+  const next = (current + direction + tabs.length) % tabs.length;
+  setActiveTab(tabs[next]);
+}
+
+export function accuse() {
   if (state.gameOver || state.selectedSuspectIndex === null) return;
 
   state.gameOver = true;
+  stopTimer();
 
   const accused = state.currentCase.suspects[state.selectedSuspectIndex];
   const murderer = state.currentCase.suspects.find(s => s.guilty);
@@ -81,10 +101,54 @@ function accuse() {
 
   renderAccuseButton();
   renderFooter();
+  renderTimer();
 }
+
+/* ---------- Timer ---------- */
+
+export function startTimer() {
+  const limit = state.currentCase.timeLimit || 0;
+  if (!limit) return;
+
+  state.timeRemaining = limit;
+  renderTimer();
+
+  state.timerId = setInterval(() => {
+    state.timeRemaining -= 1;
+    renderTimer();
+    if (state.timeRemaining <= 0) {
+      timeOut();
+    }
+  }, 1000);
+}
+
+export function stopTimer() {
+  if (state.timerId) {
+    clearInterval(state.timerId);
+    state.timerId = null;
+  }
+}
+
+function timeOut() {
+  stopTimer();
+  if (state.gameOver) return;
+  state.gameOver = true;
+  const murderer = state.currentCase.suspects.find(s => s.guilty);
+  showResult(
+    `<strong>TIME'S UP.</strong><br>
+     The killer was <strong>${murderer.name}</strong>. The case goes cold.`,
+    false
+  );
+  renderAccuseButton();
+  renderFooter();
+  renderTimer();
+}
+
+/* ---------- Boot ---------- */
 
 export function startGame() {
   loadFirstCase();
   attachHandlers();
   renderAll();
+  startTimer();
 }
