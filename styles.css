@@ -10,17 +10,26 @@
 
 * { box-sizing: border-box; }
 
-body {
+html, body {
   margin: 0;
-  min-height: 100vh;
+  padding: 0;
+  min-height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
   background: radial-gradient(circle at 50% 0%, #2a2a2a, #0d0d0d 70%);
+  background-attachment: fixed;
   color: var(--paper);
   font-family: 'Courier New', Courier, monospace;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
+  -webkit-tap-highlight-color: transparent;
 }
+
+/* ---------- Layout ---------- */
 
 .case-file {
   width: 100%;
@@ -29,13 +38,23 @@ body {
   border: 1px solid #3a3a3a;
   border-radius: 6px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.7);
-  padding: 32px;
+  padding: 24px;
+  touch-action: pan-y;
 }
+
+/* ---------- Header ---------- */
 
 .header {
   border-bottom: 1px solid #3a3a3a;
-  padding-bottom: 16px;
-  margin-bottom: 24px;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 .stamp {
@@ -43,54 +62,125 @@ body {
   border: 2px solid var(--danger);
   color: var(--danger);
   padding: 4px 12px;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 2px;
   transform: rotate(-3deg);
-  margin-bottom: 12px;
   opacity: 0.85;
 }
 
+.timer {
+  font-size: 14px;
+  color: var(--danger);
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.timer.warning {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
 h1 {
-  margin: 0 0 8px 0;
-  font-size: 22px;
+  margin: 0 0 6px 0;
+  font-size: 20px;
   letter-spacing: 1px;
 }
 
 .case-id {
   color: var(--accent);
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 2px;
 }
+
+/* ---------- Scene ---------- */
 
 .scene {
   background: var(--paper);
   color: var(--ink);
-  padding: 18px 20px;
+  padding: 14px 16px;
   border-radius: 3px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
 }
 
 .scene strong { color: var(--danger); }
 
-h2 {
-  font-size: 13px;
-  letter-spacing: 3px;
-  color: var(--accent);
-  text-transform: uppercase;
-  margin: 24px 0 12px 0;
+/* ---------- Tabs ---------- */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid #3a3a3a;
+  margin-bottom: 16px;
 }
+
+.tab {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.15s;
+  width: auto;
+  flex: 1;
+  text-transform: none;
+}
+
+.tab:hover:not(.active) {
+  color: var(--paper);
+  background: rgba(201, 169, 97, 0.08);
+}
+
+.tab.active {
+  color: var(--accent);
+  background: rgba(201, 169, 97, 0.12);
+  border-bottom: 2px solid var(--accent);
+}
+
+/* ---------- Tab Panels ---------- */
+
+.tab-panels {
+  position: relative;
+  min-height: 200px;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.tab-panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ---------- Clues ---------- */
 
 .clues {
   list-style: none;
   padding: 0;
-  margin: 0 0 24px 0;
+  margin: 0 0 16px 0;
+  max-height: 45vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .clues li {
-  padding: 10px 14px;
+  padding: 12px 14px;
   background: #2e2e2e;
   border-left: 3px solid var(--accent);
   margin-bottom: 8px;
@@ -98,6 +188,9 @@ h2 {
   line-height: 1.5;
   cursor: pointer;
   transition: background 0.15s;
+  min-height: 44px; /* finger-friendly */
+  display: flex;
+  align-items: center;
 }
 
 .clues li:hover { background: #383838; }
@@ -108,21 +201,39 @@ h2 {
   font-style: italic;
 }
 
+.clues li.unreliable {
+  border-left-color: var(--danger);
+  background: rgba(179, 58, 58, 0.08);
+}
+
+.clues li.unreliable::before {
+  content: "⚠ ";
+  color: var(--danger);
+  margin-right: 6px;
+}
+
+/* ---------- Suspects ---------- */
+
 .suspects {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
 .suspect {
   background: #2e2e2e;
   border: 1px solid #3a3a3a;
   border-radius: 4px;
-  padding: 14px;
+  padding: 14px 10px;
   text-align: center;
   cursor: pointer;
   transition: all 0.15s;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  user-select: none;
 }
 
 .suspect:hover {
@@ -136,15 +247,17 @@ h2 {
   box-shadow: 0 0 0 2px var(--accent);
 }
 
-.suspect .avatar { font-size: 32px; margin-bottom: 8px; }
-.suspect .name { font-size: 13px; letter-spacing: 1px; margin-bottom: 4px; }
-.suspect .role { font-size: 11px; color: #888; }
+.suspect .avatar { font-size: 28px; margin-bottom: 6px; }
+.suspect .name   { font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
+.suspect .role   { font-size: 10px; color: #888; }
+
+/* ---------- Buttons ---------- */
 
 button {
   background: var(--accent);
   color: var(--ink);
   border: none;
-  padding: 12px 24px;
+  padding: 14px 24px;
   font-family: inherit;
   font-size: 13px;
   letter-spacing: 2px;
@@ -153,6 +266,8 @@ button {
   border-radius: 3px;
   transition: all 0.15s;
   width: 100%;
+  min-height: 48px;
+  touch-action: manipulation;
 }
 
 button:hover:not(:disabled) { background: #ddb974; }
@@ -163,11 +278,13 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* ---------- Result ---------- */
+
 .result {
-  margin-top: 20px;
-  padding: 16px;
+  margin-top: 16px;
+  padding: 14px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
   display: none;
 }
@@ -186,9 +303,11 @@ button:disabled {
   color: #f0b8b8;
 }
 
+/* ---------- Footer ---------- */
+
 .footer {
-  margin-top: 24px;
-  padding-top: 16px;
+  margin-top: 16px;
+  padding-top: 12px;
   border-top: 1px solid #3a3a3a;
   display: flex;
   justify-content: space-between;
@@ -204,7 +323,42 @@ button:disabled {
   color: var(--accent);
   padding: 8px 16px;
   width: auto;
+  min-height: auto;
   font-size: 12px;
 }
 
+.link-btn:hover { background: rgba(201, 169, 97, 0.1); }
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 600px) {
+  body { padding: 8px; align-items: flex-start; }
+  .case-file { padding: 16px; border-radius: 4px; }
+  h1 { font-size: 17px; }
+  .scene { font-size: 12px; padding: 12px; }
+  .clues li { font-size: 12px; padding: 10px 12px; }
+  .tab { font-size: 12px; padding: 10px 8px; }
+  .suspects { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .suspect { padding: 10px 6px; min-height: 100px; }
+  .suspect .avatar { font-size: 24px; }
+  .suspect .name { font-size: 11px; }
+  .suspect .role { font-size: 9px; }
+  button { padding: 12px 16px; font-size: 12px; }
+  .clues { max-height: 40vh; }
+}
+
+/* ---------- Keyboard hint (desktop only) ---------- */
+
+.keyboard-hint {
+  display: none;
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .keyboard-hint { display: block; }
+}
 .link-btn:hover { background: rgba(201, 169, 97, 0.1); }
