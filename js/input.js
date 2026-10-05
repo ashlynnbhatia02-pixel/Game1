@@ -1,8 +1,6 @@
 /* ============================================================
    js/input.js
-   Centralized input: swipe gestures + keyboard shortcuts.
-   Every input method routes through controller actions, so
-   adding a new input (gamepad?) later is a 5-line change.
+   Centralized input: mouse clicks, swipe gestures, keyboard.
    ============================================================ */
 
 import { state } from "./state.js";
@@ -10,28 +8,82 @@ import {
   selectSuspect,
   accuse,
   cycleTab,
-  setActiveTab
+  setActiveTab,
+  startTimer
 } from "./controller.js";
 import { loadNextCase } from "./case.js";
 import { renderAll, clearResult } from "./renderer.js";
-import { startTimer } from "./controller.js";
 
-const SWIPE_THRESHOLD = 50; // px
-const SWIPE_MAX_TIME  = 600; // ms
+const SWIPE_THRESHOLD = 50;
+const SWIPE_MAX_TIME  = 600;
 
 export function attachInputHandlers() {
+  attachTabClicks();
+  attachClueClicks();
+  attachSuspectClicks();
+  attachAccuseClick();
+  attachNextCaseClick();
   attachSwipeHandlers();
   attachKeyboardHandlers();
 }
 
-/* ---------- Swipe ---------- */
+/* ---------- Mouse clicks (desktop + touch both fire "click") ---------- */
+
+function attachTabClicks() {
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", (e) => {
+      e.preventDefault();
+      setActiveTab(tab.dataset.tab);
+    });
+  });
+}
+
+function attachClueClicks() {
+  const cluesEl = document.getElementById("clues");
+  cluesEl.addEventListener("click", (e) => {
+    const li = e.target.closest("li");
+    if (!li) return;
+    readClueFromClick(li);
+  });
+}
+
+function attachSuspectClicks() {
+  const suspectsEl = document.getElementById("suspects");
+  suspectsEl.addEventListener("click", (e) => {
+    const card = e.target.closest(".suspect");
+    if (!card) return;
+    selectSuspect(Number(card.dataset.suspectIndex));
+  });
+}
+
+function attachAccuseClick() {
+  document.getElementById("accuseBtn").addEventListener("click", accuse);
+}
+
+function attachNextCaseClick() {
+  document.getElementById("nextCaseBtn").addEventListener("click", () => {
+    const next = loadNextCase();
+    if (!next) return;
+    clearResult();
+    renderAll();
+    startTimer();
+  });
+}
+
+function readClueFromClick(li) {
+  const index = Number(li.dataset.clueIndex);
+  if (state.gameOver) return;
+  state.cluesRead.add(index);
+  li.classList.toggle("read");
+}
+
+/* ---------- Swipe (touch only) ---------- */
 
 function attachSwipeHandlers() {
   const panels = document.getElementById("tabPanels");
   if (!panels) return;
 
-  let startX = 0, startY = 0, startTime = 0;
-  let tracking = false;
+  let startX = 0, startY = 0, startTime = 0, tracking = false;
 
   panels.addEventListener("touchstart", (e) => {
     const t = e.changedTouches[0];
@@ -49,21 +101,18 @@ function attachSwipeHandlers() {
     const dy = t.clientY - startY;
     const dt = Date.now() - startTime;
 
-    // Must be a horizontal swipe, quick, and long enough
     if (dt > SWIPE_MAX_TIME) return;
     if (Math.abs(dx) < SWIPE_THRESHOLD) return;
-    if (Math.abs(dy) > Math.abs(dx)) return; // vertical scroll, ignore
+    if (Math.abs(dy) > Math.abs(dx)) return;
 
-    // Swipe right = previous tab, swipe left = next tab
     cycleTab(dx > 0 ? -1 : 1);
   }, { passive: true });
 }
 
-/* ---------- Keyboard ---------- */
+/* ---------- Keyboard (desktop) ---------- */
 
 function attachKeyboardHandlers() {
   document.addEventListener("keydown", (e) => {
-    // Ignore if typing into an input (future-proofing)
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
 
     if (state.gameOver) {
@@ -78,27 +127,23 @@ function attachKeyboardHandlers() {
       return;
     }
 
-    // Number keys → select suspect
     const n = Number(e.key);
     if (n >= 1 && n <= state.currentCase.suspects.length) {
       selectSuspect(n - 1);
       return;
     }
 
-    // Enter → accuse
     if (e.key === "Enter") {
       accuse();
       return;
     }
 
-    // Arrow keys / Tab → switch tabs
     if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
       e.preventDefault();
       cycleTab(e.key === "ArrowRight" ? 1 : -1);
       return;
     }
 
-    // E / S shortcuts
     if (e.key.toLowerCase() === "e") setActiveTab("evidence");
     if (e.key.toLowerCase() === "s") setActiveTab("suspects");
   });
