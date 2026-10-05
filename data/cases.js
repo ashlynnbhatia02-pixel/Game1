@@ -322,4 +322,67 @@ function buildClues(suspects, guiltyIndex, diff, rng) {
   const evidence = [];
 
   // Two strong clues → guilty
-  evidence.push({ text: `${guilty.name} was seen near the
+  evidence.push({ text: `${guilty.name} was seen near the scene at the time of death.`, unreliable: false });
+  evidence.push({ text: `A witness reports ${guilty.name}'s alibi does not hold up.`, unreliable: false });
+
+  // Cleansing clues for each innocent
+  innocents.forEach(inn => {
+    evidence.push({ text: `${inn.name} was confirmed elsewhere by multiple witnesses.`, unreliable: false });
+  });
+
+  // Distractor (unreliable) clues
+  const filler = [
+    `${guilty.name} had argued with the victim earlier that week.`,
+    `The victim had recently changed their will.`,
+    `A locked door was found open — suggesting an inside job.`,
+    `The victim's phone showed a deleted message from an unknown number.`,
+    `Footprints were found that did not match any guest's shoes.`,
+    `A staff member reported hearing raised voices shortly before the death.`,
+    `The victim was planning to fire someone — the name was not recorded.`,
+    `A broken vase near the scene suggests a struggle.`
+  ];
+
+  // Add false clues (marked unreliable) — harder to reason about
+  const falseClues = [
+    `An anonymous tip claims ${innocents[0].name} was at the scene — the tip was later retracted.`,
+    `A witness originally named ${innocents[1] ? innocents[1].name : innocents[0].name}, but changed their story twice.`,
+    `A forged note was found, attempting to frame another suspect.`
+  ];
+
+  for (let i = 0; i < diff.falseClues; i++) {
+    evidence.push({ text: falseClues[i], unreliable: true });
+  }
+
+  while (evidence.length < diff.clueCount && filler.length > 0) {
+    const idx = Math.floor(rng() * filler.length);
+    evidence.push({ text: filler.splice(idx, 1)[0], unreliable: false });
+  }
+
+  // Shuffle
+  for (let i = evidence.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [evidence[i], evidence[j]] = [evidence[j], evidence[i]];
+  }
+
+  return evidence;
+}
+
+/* ---------- Exports ---------- */
+
+export const CASES = [
+  ...handCrafted.map(c => ({
+    ...c,
+    // Convert hand-crafted clues (strings) to objects for consistency
+    clues: c.clues.map(text => ({ text, unreliable: false })),
+    timeLimit: 0
+  })),
+  ...Array.from({ length: 90 }, (_, i) => generateCase(11 + i))
+];
+
+export function getCaseByLevel(level) {
+  return CASES.find(c => c.level === level) || CASES[0];
+}
+
+export function getTotalLevels() {
+  return CASES.length;
+}
