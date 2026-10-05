@@ -1,8 +1,13 @@
 /* ============================================================
    data/cases.js
-   Levels 1-10: hand-crafted.
-   Levels 11-100: procedurally generated.
-   Every case is guaranteed solvable.
+   Difficulty ramps every ~15 levels:
+     1-10:   hand-crafted (3 suspects)
+     11-25:  3 suspects + distractor clues
+     26-40:  4 suspects
+     41-55:  4 suspects + 1 false clue
+     56-70:  4 suspects + false clue + 90s timer
+     71-85:  5 suspects + 2 false clues + timer
+     86-100: 5 suspects + 2 false clues + 60s timer
    ============================================================ */
 
 const handCrafted = [
@@ -45,7 +50,7 @@ const handCrafted = [
   {
     level: 3,
     title: "The Midnight Yacht",
-    scene: `At <strong>midnight</strong>, <strong>Captain Reeves</strong> was found dead on the deck of his yacht, stabbed once in the back. The yacht was 3 miles offshore. Only three passengers were aboard. There was no way for anyone to have swum away unseen.`,
+    scene: `At <strong>midnight</strong>, <strong>Captain Reeves</strong> was found dead on the deck of his yacht, stabbed once in the back. The yacht was 3 miles offshore. Only three passengers were aboard.`,
     clues: [
       "The murder weapon was a fishing knife from the yacht's own galley.",
       "The captain's watch had stopped at 11:47 PM.",
@@ -63,7 +68,7 @@ const handCrafted = [
   {
     level: 4,
     title: "The Silent Auction",
-    scene: `During a charity auction at <strong>10:00 PM</strong>, <strong>Mrs. Delacroix</strong> was found dead in the coatroom, strangled with a silk scarf. The room was dark. The door had been locked from the inside — but the lock is a simple bolt anyone could operate.`,
+    scene: `During a charity auction at <strong>10:00 PM</strong>, <strong>Mrs. Delacroix</strong> was found dead in the coatroom, strangled with a silk scarf.`,
     clues: [
       "The scarf belonged to the victim herself.",
       "A witness saw Mr. Trent enter the coatroom at 9:50 PM.",
@@ -81,7 +86,7 @@ const handCrafted = [
   {
     level: 5,
     title: "The Greenhouse Poisoning",
-    scene: `Botanist <strong>Dr. Iris Whitlock</strong> was found dead at <strong>7:00 AM</strong> in her own greenhouse, poisoned by a rare plant toxin. She had been working late the night before. Only two colleagues had access to the greenhouse.`,
+    scene: `Botanist <strong>Dr. Iris Whitlock</strong> was found dead at <strong>7:00 AM</strong> in her own greenhouse, poisoned by a rare plant toxin.`,
     clues: [
       "The toxin came from a plant that only blooms at night.",
       "The greenhouse's automatic lights were on until 11 PM.",
@@ -99,7 +104,7 @@ const handCrafted = [
   {
     level: 6,
     title: "The Casino Chips",
-    scene: `At <strong>2:30 AM</strong>, casino owner <strong>Mr. Salvatore</strong> was found dead in his private office, shot once. The office has one door and one window — the window was painted shut years ago. Security footage shows only three people entered the floor that night.`,
+    scene: `At <strong>2:30 AM</strong>, casino owner <strong>Mr. Salvatore</strong> was found dead in his private office, shot once. Security footage shows only three people entered the floor.`,
     clues: [
       "The gun was found in a vent, wiped clean.",
       "Ms. Delgado was seen leaving the floor at 2:15 AM.",
@@ -117,7 +122,7 @@ const handCrafted = [
   {
     level: 7,
     title: "The Theatre Dressing Room",
-    scene: `After the final curtain at <strong>11:00 PM</strong>, lead actress <strong>Miss Duval</strong> was found dead in her dressing room, struck with a heavy mirror. The theatre was packed. Only the cast and crew had backstage access.`,
+    scene: `After the final curtain at <strong>11:00 PM</strong>, lead actress <strong>Miss Duval</strong> was found dead in her dressing room.`,
     clues: [
       "The mirror was cracked in a way that suggests a left-handed swing.",
       "The stage manager, Mr. Bell, is left-handed.",
@@ -135,7 +140,7 @@ const handCrafted = [
   {
     level: 8,
     title: "The Mountain Lodge",
-    scene: `A blizzard trapped six guests at a mountain lodge. At <strong>3:00 AM</strong>, <strong>Mr. Halvorsen</strong> was found dead in the snow outside, having fallen from a second-floor balcony. The balcony door was locked from the inside.`,
+    scene: `A blizzard trapped six guests at a mountain lodge. At <strong>3:00 AM</strong>, <strong>Mr. Halvorsen</strong> was found dead in the snow outside.`,
     clues: [
       "Mr. Halvorsen was afraid of heights and never went on balconies.",
       "A footprint in the snow matched Ms. Vinter's boots.",
@@ -153,7 +158,7 @@ const handCrafted = [
   {
     level: 9,
     title: "The University Lab",
-    scene: `At <strong>1:00 PM</strong> during a lunch break, <strong>Professor Adeyemi</strong> was found dead in her locked lab, electrocuted by a rigged piece of equipment. The lab requires keycard access. Only three keycards logged entry that day.`,
+    scene: `At <strong>1:00 PM</strong>, <strong>Professor Adeyemi</strong> was found dead in her locked lab, electrocuted by a rigged piece of equipment.`,
     clues: [
       "The rigged equipment was set to trigger when the lab's power was next turned on.",
       "The lab's power was turned off for maintenance at noon and back on at 12:55 PM.",
@@ -171,7 +176,7 @@ const handCrafted = [
   {
     level: 10,
     title: "The Final Interview",
-    scene: `Talk-show host <strong>Mr. Kane</strong> was found dead in his studio at <strong>9:00 PM</strong>, minutes after his live broadcast ended. He was poisoned. The only people backstage were his three final guests — all of whom had motive.`,
+    scene: `Talk-show host <strong>Mr. Kane</strong> was found dead in his studio at <strong>9:00 PM</strong>, minutes after his live broadcast ended.`,
     clues: [
       "The poison was in a glass of water on Mr. Kane's desk.",
       "The water was poured by the studio's assistant, who was on camera the whole time.",
@@ -188,7 +193,7 @@ const handCrafted = [
   }
 ];
 
-/* ---------- PROCEDURAL GENERATION (Levels 11-100) ---------- */
+/* ---------- PROCEDURAL GENERATION (11-100) ---------- */
 
 const FIRST_NAMES = [
   "Alexander","Beatrice","Carlos","Diana","Elias","Fiona","Gregor","Helena",
@@ -234,6 +239,20 @@ const WEAPONS = [
 
 const TIMES = ["7:15 PM","8:30 PM","9:42 PM","10:00 PM","11:20 PM","midnight","2:30 AM","6:45 AM"];
 
+/* ---------- Difficulty tiers ---------- */
+
+function getDifficultyForLevel(level) {
+  if (level <= 10)  return { suspects: 3, clueCount: 6,  falseClues: 0, timeLimit: 0 };
+  if (level <= 25)  return { suspects: 3, clueCount: 8,  falseClues: 0, timeLimit: 0 };
+  if (level <= 40)  return { suspects: 4, clueCount: 8,  falseClues: 0, timeLimit: 0 };
+  if (level <= 55)  return { suspects: 4, clueCount: 9,  falseClues: 1, timeLimit: 0 };
+  if (level <= 70)  return { suspects: 4, clueCount: 9,  falseClues: 1, timeLimit: 90 };
+  if (level <= 85)  return { suspects: 5, clueCount: 10, falseClues: 2, timeLimit: 90 };
+  return              { suspects: 5, clueCount: 10, falseClues: 2, timeLimit: 60 };
+}
+
+/* ---------- RNG ---------- */
+
 function makeRng(seed) {
   let s = seed >>> 0;
   return function () {
@@ -246,23 +265,26 @@ function pick(arr, rng) {
   return arr[Math.floor(rng() * arr.length)];
 }
 
-function pickThree(arr, rng) {
+function pickN(arr, n, rng) {
   const copy = [...arr];
   const out = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < n; i++) {
     const idx = Math.floor(rng() * copy.length);
     out.push(copy.splice(idx, 1)[0]);
   }
   return out;
 }
 
+/* ---------- Case generation ---------- */
+
 function generateCase(level) {
   const rng = makeRng(level * 7919);
+  const diff = getDifficultyForLevel(level);
 
-  const names    = pickThree(FIRST_NAMES, rng);
-  const surnames = pickThree(LAST_NAMES, rng);
-  const roles    = pickThree(ROLES, rng);
-  const avatars  = pickThree(AVATARS, rng);
+  const names    = pickN(FIRST_NAMES, diff.suspects, rng);
+  const surnames = pickN(LAST_NAMES,  diff.suspects, rng);
+  const roles    = pickN(ROLES,       diff.suspects, rng);
+  const avatars  = pickN(AVATARS,     diff.suspects, rng);
 
   const suspects = names.map((first, i) => ({
     name: `${first} ${surnames[i]}`,
@@ -271,7 +293,7 @@ function generateCase(level) {
     guilty: false
   }));
 
-  const guiltyIndex = Math.floor(rng() * 3);
+  const guiltyIndex = Math.floor(rng() * diff.suspects);
   suspects[guiltyIndex].guilty = true;
 
   const victimName = `Mr. ${pick(FIRST_NAMES, rng)} ${pick(LAST_NAMES, rng)}`;
@@ -279,66 +301,25 @@ function generateCase(level) {
   const weapon     = pick(WEAPONS, rng);
   const time       = pick(TIMES, rng);
 
-  const clueCount = Math.min(6 + Math.floor(level / 15), 12);
+  const scene = `At <strong>${time}</strong>, the body of <strong>${victimName}</strong> was discovered at <strong>${location}</strong>. The cause of death was ${weapon}. Only ${diff.suspects} people had both motive and opportunity.`;
 
-  const scene = `At <strong>${time}</strong>, the body of <strong>${victimName}</strong> was discovered at <strong>${location}</strong>. The cause of death was ${weapon}. Only three people had both motive and opportunity. You must determine which of them is guilty.`;
-
-  const clues = buildClues(suspects, guiltyIndex, clueCount, rng);
+  const clues = buildClues(suspects, guiltyIndex, diff, rng);
 
   return {
     level,
     title: `The ${location.replace(/^an? /, "").replace(/\b\w/g, c => c.toUpperCase())} Affair`,
     scene,
     clues,
-    suspects
+    suspects,
+    timeLimit: diff.timeLimit
   };
 }
 
-function buildClues(suspects, guiltyIndex, count, rng) {
+function buildClues(suspects, guiltyIndex, diff, rng) {
   const guilty = suspects[guiltyIndex];
   const innocents = suspects.filter((_, i) => i !== guiltyIndex);
 
   const evidence = [];
 
-  evidence.push(`${guilty.name} was seen near the scene at the time of death.`);
-  evidence.push(`A witness reports ${guilty.name}'s alibi does not hold up.`);
-
-  evidence.push(`${innocents[0].name} was confirmed to be elsewhere by multiple witnesses.`);
-  evidence.push(`${innocents[1].name} has no connection to the weapon or the victim.`);
-
-  const filler = [
-    `${guilty.name} had argued with the victim earlier that week.`,
-    `${innocents[0].name} stood to gain financially from the victim's death.`,
-    `${innocents[1].name} was heard making a threat against the victim.`,
-    `The victim had recently changed their will.`,
-    `A locked door was found open — suggesting an inside job.`,
-    `The victim's phone showed a deleted message from an unknown number.`,
-    `Footprints were found that did not match any guest's shoes.`,
-    `A staff member reported hearing raised voices shortly before the death.`
-  ];
-
-  while (evidence.length < count && filler.length > 0) {
-    const idx = Math.floor(rng() * filler.length);
-    evidence.push(filler.splice(idx, 1)[0]);
-  }
-
-  for (let i = evidence.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [evidence[i], evidence[j]] = [evidence[j], evidence[i]];
-  }
-
-  return evidence;
-}
-
-export const CASES = [
-  ...handCrafted,
-  ...Array.from({ length: 90 }, (_, i) => generateCase(11 + i))
-];
-
-export function getCaseByLevel(level) {
-  return CASES.find(c => c.level === level) || CASES[0];
-}
-
-export function getTotalLevels() {
-  return CASES.length;
-}
+  // Two strong clues → guilty
+  evidence.push({ text: `${guilty.name} was seen near the
