@@ -1,8 +1,5 @@
-/* ============================================================
-   js/main.js
-   Entry point. Boots the game.
-   ============================================================ */
-
 import { startGame } from "./controller.js";
+import { attachInputHandlers } from "./input.js";
 
 startGame();
+attachInputHandlers();
