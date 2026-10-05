@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a1a1a" />
   <title>Cold Case</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -11,18 +12,32 @@
   <main class="case-file" id="app">
 
     <header class="header">
-      <div class="stamp">OPEN CASE</div>
+      <div class="header-top">
+        <div class="stamp">OPEN CASE</div>
+        <div class="timer" id="timer" hidden>⏱ <span id="timerValue">90</span>s</div>
+      </div>
       <h1 id="caseTitle">Loading…</h1>
       <div class="case-id" id="caseId"></div>
     </header>
 
     <section class="scene" id="scene"></section>
 
-    <h2>Evidence</h2>
-    <ul class="clues" id="clues"></ul>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="evidence" role="tab">📋 Evidence</button>
+      <button class="tab" data-tab="suspects" role="tab">🕵️ Suspects</button>
+    </nav>
 
-    <h2>Suspects</h2>
-    <div class="suspects" id="suspects"></div>
+    <div class="tab-panels" id="tabPanels">
+
+      <section class="tab-panel active" data-panel="evidence">
+        <ul class="clues" id="clues"></ul>
+      </section>
+
+      <section class="tab-panel" data-panel="suspects">
+        <div class="suspects" id="suspects"></div>
+      </section>
+
+    </div>
 
     <button id="accuseBtn" disabled>Accuse Suspect</button>
 
