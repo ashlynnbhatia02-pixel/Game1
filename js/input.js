@@ -13,6 +13,7 @@ import {
 } from "./controller.js";
 import { loadNextCase } from "./case.js";
 import { renderAll, clearResult } from "./renderer.js";
+import { playSound } from "./audio.js";
 
 const SWIPE_THRESHOLD = 50;
 const SWIPE_MAX_TIME  = 600;
@@ -33,6 +34,7 @@ function attachTabClicks() {
   document.querySelectorAll(".tab").forEach(tab => {
     tab.addEventListener("click", (e) => {
       e.preventDefault();
+      playSound("paper");
       setActiveTab(tab.dataset.tab);
     });
   });
@@ -40,18 +42,22 @@ function attachTabClicks() {
 
 function attachClueClicks() {
   const cluesEl = document.getElementById("clues");
+  if (!cluesEl) return;
   cluesEl.addEventListener("click", (e) => {
     const li = e.target.closest("li");
     if (!li) return;
-    readClueFromClick(li);
+    playSound("typewriter");
+    readClue(Number(li.dataset.clueIndex));
   });
 }
 
 function attachSuspectClicks() {
   const suspectsEl = document.getElementById("suspects");
+  if (!suspectsEl) return;
   suspectsEl.addEventListener("click", (e) => {
     const card = e.target.closest(".suspect");
     if (!card) return;
+    playSound("select");
     selectSuspect(Number(card.dataset.suspectIndex));
   });
 }
