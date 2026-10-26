@@ -41,21 +41,6 @@ body {
   padding: 24px;
   touch-action: pan-y;
 }
-.suspect .avatar img {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #3a3a3a;
-}
-
-.suspect.selected .avatar img {
-  border-color: var(--accent);
-}
-
-@media (max-width: 600px) {
-  .suspect .avatar img { width: 48px; height: 48px; }
-}
 
 /* ---------- Header ---------- */
 
@@ -203,7 +188,7 @@ h1 {
   line-height: 1.5;
   cursor: pointer;
   transition: background 0.15s;
-  min-height: 44px; /* finger-friendly */
+  min-height: 44px;
   display: flex;
   align-items: center;
 }
@@ -262,9 +247,27 @@ h1 {
   box-shadow: 0 0 0 2px var(--accent);
 }
 
-.suspect .avatar { font-size: 28px; margin-bottom: 6px; }
-.suspect .name   { font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
-.suspect .role   { font-size: 10px; color: #888; }
+.suspect .avatar {
+  margin-bottom: 6px;
+}
+
+.suspect .avatar img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3a3a3a;
+  display: block;
+  margin: 0 auto;
+  background: #1a1a1a;
+}
+
+.suspect.selected .avatar img {
+  border-color: var(--accent);
+}
+
+.suspect .name { font-size: 12px; letter-spacing: 1px; margin-bottom: 4px; }
+.suspect .role { font-size: 10px; color: #888; }
 
 /* ---------- Buttons ---------- */
 
@@ -321,59 +324,4 @@ button:disabled {
 /* ---------- Footer ---------- */
 
 .footer {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #3a3a3a;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: #888;
-  letter-spacing: 1px;
-}
-
-.link-btn {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  padding: 8px 16px;
-  width: auto;
-  min-height: auto;
-  font-size: 12px;
-}
-
-.link-btn:hover { background: rgba(201, 169, 97, 0.1); }
-
-/* ---------- Mobile ---------- */
-
-@media (max-width: 600px) {
-  body { padding: 8px; align-items: flex-start; }
-  .case-file { padding: 16px; border-radius: 4px; }
-  h1 { font-size: 17px; }
-  .scene { font-size: 12px; padding: 12px; }
-  .clues li { font-size: 12px; padding: 10px 12px; }
-  .tab { font-size: 12px; padding: 10px 8px; }
-  .suspects { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .suspect { padding: 10px 6px; min-height: 100px; }
-  .suspect .avatar { font-size: 24px; }
-  .suspect .name { font-size: 11px; }
-  .suspect .role { font-size: 9px; }
-  button { padding: 12px 16px; font-size: 12px; }
-  .clues { max-height: 40vh; }
-}
-
-/* ---------- Keyboard hint (desktop only) ---------- */
-
-.keyboard-hint {
-  display: none;
-  font-size: 10px;
-  color: #555;
-  letter-spacing: 1px;
-  text-align: center;
-  margin-top: 8px;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .keyboard-hint { display: block; }
-}
-.link-btn:hover { background: rgba(201, 169, 97, 0.1); }
+  margin
