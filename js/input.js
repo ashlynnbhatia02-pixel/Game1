@@ -1,6 +1,5 @@
 /* ============================================================
-   js/input.js
-   Centralized input: mouse clicks, swipe gestures, keyboard.
+   js/input.js  — WEEK 4 FINAL
    ============================================================ */
 
 import { state } from "./state.js";
@@ -9,81 +8,64 @@ import {
   accuse,
   cycleTab,
   setActiveTab,
-  startTimer
+  advanceToNextCase,
+  readClue
 } from "./controller.js";
-import { loadNextCase } from "./case.js";
-import { renderAll, clearResult } from "./renderer.js";
 import { playSound } from "./audio.js";
 
 const SWIPE_THRESHOLD = 50;
 const SWIPE_MAX_TIME  = 600;
 
+let attached = false;
+
 export function attachInputHandlers() {
-  attachTabClicks();
-  attachClueClicks();
-  attachSuspectClicks();
-  attachAccuseClick();
-  attachNextCaseClick();
+  if (attached) return;
+  attached = true;
+
+  console.log("[input] attaching handlers");
+  document.addEventListener("click", handleClick);
   attachSwipeHandlers();
   attachKeyboardHandlers();
 }
 
-/* ---------- Mouse clicks (desktop + touch both fire "click") ---------- */
+function handleClick(e) {
+  const tab = e.target.closest(".tab");
+  if (tab) {
+    e.preventDefault();
+    console.log("[input] TAB CLICKED:", tab.dataset.tab);
+    playSound("paper");
+    setActiveTab(tab.dataset.tab);
+    return;
+  }
 
-function attachTabClicks() {
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.addEventListener("click", (e) => {
-      e.preventDefault();
-      playSound("paper");
-      setActiveTab(tab.dataset.tab);
-    });
-  });
-}
-
-function attachClueClicks() {
-  const cluesEl = document.getElementById("clues");
-  if (!cluesEl) return;
-  cluesEl.addEventListener("click", (e) => {
-    const li = e.target.closest("li");
-    if (!li) return;
+  const clue = e.target.closest(".clues li");
+  if (clue) {
+    console.log("[input] CLUE CLICKED:", clue.dataset.clueIndex);
     playSound("typewriter");
-    readClue(Number(li.dataset.clueIndex));
-  });
-}
+    readClue(Number(clue.dataset.clueIndex));
+    return;
+  }
 
-function attachSuspectClicks() {
-  const suspectsEl = document.getElementById("suspects");
-  if (!suspectsEl) return;
-  suspectsEl.addEventListener("click", (e) => {
-    const card = e.target.closest(".suspect");
-    if (!card) return;
+  const suspect = e.target.closest(".suspect");
+  if (suspect) {
+    console.log("[input] SUSPECT CLICKED:", suspect.dataset.suspectIndex);
     playSound("select");
-    selectSuspect(Number(card.dataset.suspectIndex));
-  });
-}
+    selectSuspect(Number(suspect.dataset.suspectIndex));
+    return;
+  }
 
-function attachAccuseClick() {
-  document.getElementById("accuseBtn").addEventListener("click", accuse);
-}
+  if (e.target.closest("#accuseBtn")) {
+    console.log("[input] ACCUSE CLICKED");
+    accuse();
+    return;
+  }
 
-function attachNextCaseClick() {
-  document.getElementById("nextCaseBtn").addEventListener("click", () => {
-    const next = loadNextCase();
-    if (!next) return;
-    clearResult();
-    renderAll();
-    startTimer();
-  });
+  if (e.target.closest("#nextCaseBtn")) {
+    console.log("[input] NEXT CASE CLICKED");
+    advanceToNextCase();
+    return;
+  }
 }
-
-function readClueFromClick(li) {
-  const index = Number(li.dataset.clueIndex);
-  if (state.gameOver) return;
-  state.cluesRead.add(index);
-  li.classList.toggle("read");
-}
-
-/* ---------- Swipe (touch only) ---------- */
 
 function attachSwipeHandlers() {
   const panels = document.getElementById("tabPanels");
@@ -115,21 +97,12 @@ function attachSwipeHandlers() {
   }, { passive: true });
 }
 
-/* ---------- Keyboard (desktop) ---------- */
-
 function attachKeyboardHandlers() {
   document.addEventListener("keydown", (e) => {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
 
     if (state.gameOver) {
-      if (e.key.toLowerCase() === "r") {
-        const next = loadNextCase();
-        if (next) {
-          clearResult();
-          renderAll();
-          startTimer();
-        }
-      }
+      if (e.key.toLowerCase() === "r") advanceToNextCase();
       return;
     }
 
