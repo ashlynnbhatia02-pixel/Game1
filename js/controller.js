@@ -44,6 +44,7 @@ export function cycleTab(direction) {
 }
 
 export function accuse() {
+   import { playSound } from "./audio.js";
   if (state.gameOver || state.selectedSuspectIndex === null) return;
 
   state.gameOver = true;
@@ -52,7 +53,8 @@ export function accuse() {
   const accused = state.currentCase.suspects[state.selectedSuspectIndex];
   const murderer = state.currentCase.suspects.find(s => s.guilty);
 
-  if (accused.guilty) {
+   if (accused.guilty) {
+    playSound("win");
     showResult(
       `<strong>CASE CLOSED.</strong><br>
        ${accused.name} was the killer. Every clue pointed to them.
@@ -60,6 +62,7 @@ export function accuse() {
       true
     );
   } else {
+    playSound("lose");
     showResult(
       `<strong>CASE COLD.</strong><br>
        ${accused.name} was innocent. The real killer was
@@ -67,12 +70,6 @@ export function accuse() {
       false
     );
   }
-
-  renderAccuseButton();
-  renderFooter();
-  renderTimer();
-}
-
 export function startTimer() {
   const limit = state.currentCase.timeLimit || 0;
   if (!limit) { renderTimer(); return; }
