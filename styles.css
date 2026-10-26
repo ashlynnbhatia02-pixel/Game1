@@ -41,6 +41,21 @@ body {
   padding: 24px;
   touch-action: pan-y;
 }
+.suspect .avatar img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3a3a3a;
+}
+
+.suspect.selected .avatar img {
+  border-color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .suspect .avatar img { width: 48px; height: 48px; }
+}
 
 /* ---------- Header ---------- */
 
