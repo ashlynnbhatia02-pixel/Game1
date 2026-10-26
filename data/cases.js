@@ -219,7 +219,19 @@ const ROLES = [
   "Architect","Investor","Editor","Curator","Pilot","Nurse","Consultant"
 ];
 
-const AVATARS = ["🧔","👩","👨","👩‍🦰","🧑","👵","👴","🧑‍💼","👩‍💼","🧑‍🔬"];
+const AVATARS = [
+  "assets/portraits/p1.jpg",
+  "assets/portraits/p2.jpg",
+  "assets/portraits/p3.jpg",
+  "assets/portraits/p4.jpg",
+   "assets/portraits/p5.jpg",
+   "assets/portraits/p6.jpg",
+   "assets/portraits/p7.jpg",
+   "assets/portraits/p8.jpg",
+   "assets/portraits/p9.jpg",
+   "assets/portraits/p10.jpg",
+ 
+];
 
 const LOCATIONS = [
   "a private mansion","a luxury hotel suite","a country estate",
