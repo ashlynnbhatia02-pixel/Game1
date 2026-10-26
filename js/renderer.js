@@ -57,11 +57,10 @@ export function renderSuspects() {
     if (state.selectedSuspectIndex === i) card.classList.add("selected");
     card.dataset.suspectIndex = i;
     card.innerHTML = `
-      <div class="avatar">${s.avatar}</div>
-      <div class="name">${s.name}</div>
-      <div class="role">${s.role}</div>
-    `;
-    els.suspects.appendChild(card);
+  <div class="avatar"><img src="${s.avatar}" alt="${s.name}" /></div>
+  <div class="name">${s.name}</div>
+  <div class="role">${s.role}</div>
+`;
   });
 }
 
