@@ -100,6 +100,12 @@ function timeOut() {
     `<strong>TIME'S UP.</strong><br>
      The killer was <strong>${murderer.name}</strong>. The case goes cold.`,
     false
+       playSound("lose");
+  showResult(
+    `<strong>TIME'S UP.</strong><br>
+     The killer was <strong>${murderer.name}</strong>. The case goes cold.`,
+    false
+  );
   );
   renderAccuseButton();
   renderFooter();
