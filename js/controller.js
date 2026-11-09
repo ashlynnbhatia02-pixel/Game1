@@ -1,4 +1,4 @@
-import { state } from "./state.js";
+import { state, save } from "./state.js";
 import {
   renderAll,
   renderClues,
