@@ -1,4 +1,5 @@
 import { state, save } from "./state.js";
+import { writeSave } from "./storage.js";
 import {
   renderAll,
   renderClues,
@@ -45,22 +46,32 @@ export function accuse() {
   state.gameOver = true;
   stopTimer();
 
+  const level = state.currentCase.level;
   const accused = state.currentCase.suspects[state.selectedSuspectIndex];
-  const murderer = state.currentCase.suspects.find(s => s.guilty);
+  const murderer = state.currentCase.suspects.find(function(s) { return s.guilty; });
 
   if (accused.guilty) {
     playSound("win");
-    const winMessage =
+    save.casesSolved = save.casesSolved + 1;
+    save.totalRating = save.totalRating + 100;
+    save.currentLevel = level + 1;
+    writeSave(save);
+    showResult(
       "<strong>CASE CLOSED.</strong><br>" +
-      accused.name + " was the killer. Every clue pointed to them. Justice is served.";
-    showResult(winMessage, true);
+      accused.name + " was the killer. +100 rating.",
+      true
+    );
   } else {
     playSound("lose");
-    const loseMessage =
+    save.casesFailed = save.casesFailed + 1;
+    save.totalRating = save.totalRating + 10;
+    writeSave(save);
+    showResult(
       "<strong>CASE COLD.</strong><br>" +
-      accused.name + " was innocent. The real killer was <strong>" +
-      murderer.name + "</strong>. He slipped away while you chased the wrong lead.";
-    showResult(loseMessage, false);
+      accused.name + " was innocent. The killer was <strong>" +
+      murderer.name + "</strong>.",
+      false
+    );
   }
 
   renderAccuseButton();
@@ -70,16 +81,13 @@ export function accuse() {
 
 export function startTimer() {
   const limit = state.currentCase.timeLimit || 0;
-  if (!limit) {
-    renderTimer();
-    return;
-  }
+  if (!limit) { renderTimer(); return; }
 
   state.timeRemaining = limit;
   renderTimer();
 
-  state.timerId = setInterval(() => {
-    state.timeRemaining -= 1;
+  state.timerId = setInterval(function() {
+    state.timeRemaining = state.timeRemaining - 1;
     renderTimer();
     if (state.timeRemaining <= 0) timeOut();
   }, 1000);
@@ -96,12 +104,17 @@ function timeOut() {
   stopTimer();
   if (state.gameOver) return;
   state.gameOver = true;
-  const murderer = state.currentCase.suspects.find(s => s.guilty);
   playSound("lose");
-  const message =
-    "<strong>TIME'S UP.</strong><br>" +
-    "The killer was <strong>" + murderer.name + "</strong>. The case goes cold.";
-  showResult(message, false);
+  save.casesFailed = save.casesFailed + 1;
+  writeSave(save);
+
+  const murderer = state.currentCase.suspects.find(function(s) { return s.guilty; });
+  showResult(
+    "<strong>TIME'S UP.</strong><br>The killer was <strong>" +
+    murderer.name + "</strong>.",
+    false
+  );
+
   renderAccuseButton();
   renderFooter();
   renderTimer();
@@ -120,6 +133,3 @@ export function startGame() {
   renderAll();
   startTimer();
 }
-save.casesSolved++;
-save.totalRating += 100;
-writeSave(save);
