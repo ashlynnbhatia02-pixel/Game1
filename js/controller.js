@@ -120,3 +120,6 @@ export function startGame() {
   renderAll();
   startTimer();
 }
+save.casesSolved++;
+save.totalRating += 100;
+writeSave(save);
